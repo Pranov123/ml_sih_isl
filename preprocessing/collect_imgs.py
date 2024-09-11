@@ -2,15 +2,15 @@ import os
 
 import cv2
 
-DATA_DIR = 'double_hand'
+DATA_DIR = '../dataset/single_hand'
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
-number_of_classes = 20
+number_of_classes = 3
 dataset_size = 200
 
 cap = cv2.VideoCapture(0)
-for j in range(number_of_classes):
+for j in range(17,20):
     if not os.path.exists(os.path.join(DATA_DIR, str(j))):
         os.makedirs(os.path.join(DATA_DIR, str(j)))
 

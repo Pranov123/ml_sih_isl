@@ -10,7 +10,7 @@ mp_drawing_styles = mp.solutions.drawing_styles
 
 hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
-DATA_DIR = 'double_hand'
+DATA_DIR = '../dataset/single_hand'
 
 data = []
 labels = []
@@ -27,8 +27,10 @@ for dir_ in os.listdir(DATA_DIR):
         img = cv2.imread(os.path.join(DATA_DIR, dir_, img_path))
         img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
+        # detecting hands using mediapipe
         results = hands.process(img_rgb)
         if results.multi_hand_landmarks:
+            # looping through each hand landmarks
             for hand_landmarks in results.multi_hand_landmarks:
                 for i in range(len(hand_landmarks.landmark)):
                     x = hand_landmarks.landmark[i].x
@@ -50,8 +52,8 @@ for dir_ in os.listdir(DATA_DIR):
             skipped_images.append(os.path.join(DATA_DIR, dir_, img_path))
             print(f"Skipped: {os.path.join(DATA_DIR, dir_, img_path)}")
 
-# Save the data and labels
-f = open('double_hand_data.pickle', 'wb')
+# Save the data and labels into a binary file, so that we can use it to train the model
+f = open('../imageData_and_labels/single_hand_data_word_seq(latest).pickle', 'wb')
 pickle.dump({'data': data, 'labels': labels}, f)
 f.close()
 
