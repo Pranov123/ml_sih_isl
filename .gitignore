@@ -2,3 +2,4 @@ dataset
 .env
 isl_pro
 Indian
+__pycache__
