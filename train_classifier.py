@@ -5,13 +5,13 @@ from sklearn.metrics import accuracy_score,classification_report
 import numpy as np
 
 # Load the data
-data_dict = pickle.load(open('imageData_and_labels/single_hand_data_word_seq(latest).pickle', 'rb'))
+data_dict = pickle.load(open('imageData_and_labels/double_hand_data_word.pickle', 'rb'))
 
 filtered_data = []
 filtered_labels = []
 
 for item, label in zip(data_dict['data'], data_dict['labels']):
-    if np.array(item).shape != (84,):
+    if np.array(item).shape != (42,):
         filtered_data.append(item)
         filtered_labels.append(label)
 
@@ -40,5 +40,5 @@ print("Classification report:")
 print(classification_report(y_test,y_predict))
 
 # Save the model
-with open('saved_models/single_hand_model_word_seq.p', 'wb') as f:
+with open('saved_models/double_hand_model_word(scikit-upgraded).p', 'wb') as f:
     pickle.dump({'model': model}, f)
