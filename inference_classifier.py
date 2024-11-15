@@ -4,10 +4,10 @@ import mediapipe as mp
 import numpy as np
 
 # Load the models
-single_hand_model_dict = pickle.load(open('saved_models/single_hand_model_word_seq.p', 'rb'))
+single_hand_model_dict = pickle.load(open('saved_models/single_hand_model_word_seq(scikit-upgraded).p', 'rb'))
 single_hand_model = single_hand_model_dict['model']
 
-double_hand_model_dict = pickle.load(open('saved_models/double_hand_model_word.p', 'rb'))
+double_hand_model_dict = pickle.load(open('saved_models/double_hand_model_word(scikit-upgraded).p', 'rb'))
 double_hand_model = double_hand_model_dict['model']
 
 # Initialize webcam
