@@ -141,14 +141,12 @@ def process_sentence(sentence, word_to_video_map):
 
 # Usage
 if __name__ == "__main__":
-    word_to_video_map = {
+    word_to_video_map ={
         "happy": DRIVE_LINK_PLACEHOLDER.format("1HUjFYbNx4TsGhwupRh6dZbS5ov8Urtte"),
         "he": DRIVE_LINK_PLACEHOLDER.format("1KtBgcJX4eR2cvnMRk0qBq2KqRfFG367h"),
         "want":DRIVE_LINK_PLACEHOLDER.format("1YAnh6odCU3a1OdyPboWiq98gfWNXwlBO"),
-        "apple":DRIVE_LINK_PLACEHOLDER.format("17kTTMK5vkL1avoCssvTHsDxvkQov6zv_")
-        
+        "apple":DRIVE_LINK_PLACEHOLDER.format("17kTTMK5vkL1avoCssvTHsDxvkQov6zv_")    
     }
 
     sentence = "he want apple"
     process_sentence(sentence, word_to_video_map)
-    
