@@ -1,12 +1,13 @@
-from utils.drive_link_placeholder import DRIVE_LINK_PLACEHOLDER
-from utils.connections import CONNECTIONS_NOT_NEEDED
-
+import asyncio
 import cv2
 import numpy as np
 import mediapipe as mp
 import torch
-import time
 import tensorflow as tf
+import time
+
+from utils.drive_link_placeholder import DRIVE_LINK_PLACEHOLDER
+from utils.connections import CONNECTIONS_NOT_NEEDED
 
 class GPULandmarkDetector:
     def __init__(self):
@@ -49,7 +50,6 @@ class GPULandmarkDetector:
 
         if pose_landmarks:
             for connection in self.mp_pose.POSE_CONNECTIONS:
-                # Skip connections involving unwanted landmarks
                 if connection[0] in CONNECTIONS_NOT_NEEDED or connection[1] in CONNECTIONS_NOT_NEEDED:
                     continue
 
@@ -64,7 +64,6 @@ class GPULandmarkDetector:
                     cx, cy = int(lm.x * w), int(lm.y * h)
                     cv2.circle(canvas, (cx, cy), 2, hand_color, cv2.FILLED)
 
-                # Draw lines between hand landmarks
                 for connection in self.mp_hands.HAND_CONNECTIONS:
                     start_x, start_y = int(hand_landmark.landmark[connection[0]].x * w), int(hand_landmark.landmark[connection[0]].y * h)
                     end_x, end_y = int(hand_landmark.landmark[connection[1]].x * w), int(hand_landmark.landmark[connection[1]].y * h)
@@ -97,7 +96,7 @@ class GPULandmarkDetector:
 
         return canvas
 
-def play_video(detector, video_path):
+async def play_video(detector, video_path):
     """Plays a video and applies landmark detection."""
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
@@ -118,35 +117,42 @@ def play_video(detector, video_path):
             break
 
     cap.release()
-    cv2.destroyAllWindows()
 
-def process_sentence(sentence, word_to_video_map):
-    """Processes a sentence and plays corresponding videos sequentially."""
+async def fetch_and_play_video(detector, word, word_to_video_map):
+    """Fetch and play a video for a word asynchronously."""
+    video_path = word_to_video_map.get(word.lower())
+    if video_path:
+        print(f"Playing video for word: {word}")
+        await play_video(detector, video_path)
+    else:
+        print(f"No video mapped for word: {word}")
+        await asyncio.sleep(1)  # Add a small delay for unmapped words
+
+async def process_sentence(sentence, word_to_video_map):
+    """Processes a sentence and plays corresponding videos concurrently."""
     detector = GPULandmarkDetector()
 
     print(f"GPU Available: {detector.gpu_available}")
     print(f"Using device: {detector.device}")
 
-    # Break sentence into words
     words = sentence.split()
 
-    for word in words:
-        video_path = word_to_video_map.get(word.lower())
-        if video_path:
-            print(f"Playing video for word: {word}")
-            play_video(detector, video_path)
-        else:
-            print(f"No video mapped for word: {word}")
-            time.sleep(1)  # Add a small delay for unmapped words
+    # Create tasks to fetch and play videos concurrently
+    tasks = [fetch_and_play_video(detector, word, word_to_video_map) for word in words]
+    
+    # Run tasks concurrently
+    await asyncio.gather(*tasks)
 
 # Usage
 if __name__ == "__main__":
-    word_to_video_map ={
+    word_to_video_map = {
         "happy": DRIVE_LINK_PLACEHOLDER.format("1HUjFYbNx4TsGhwupRh6dZbS5ov8Urtte"),
         "he": DRIVE_LINK_PLACEHOLDER.format("1KtBgcJX4eR2cvnMRk0qBq2KqRfFG367h"),
-        "want":DRIVE_LINK_PLACEHOLDER.format("1YAnh6odCU3a1OdyPboWiq98gfWNXwlBO"),
-        "apple":DRIVE_LINK_PLACEHOLDER.format("17kTTMK5vkL1avoCssvTHsDxvkQov6zv_")    
+        "want": DRIVE_LINK_PLACEHOLDER.format("1YAnh6odCU3a1OdyPboWiq98gfWNXwlBO"),
+        "apple": DRIVE_LINK_PLACEHOLDER.format("17kTTMK5vkL1avoCssvTHsDxvkQov6zv_")
     }
 
     sentence = "he want apple"
-    process_sentence(sentence, word_to_video_map)
+    
+    # Run the process asynchronously
+    asyncio.run(process_sentence(sentence, word_to_video_map))
