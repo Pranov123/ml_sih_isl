@@ -109,7 +109,7 @@ def play_video(detector, video_path):
         if not ret:
             break
 
-        frame = cv2.resize(frame, (400, 400))
+        frame = cv2.resize(frame, (500, 500))
         landmark_canvas = detector.detect_landmarks(frame)
 
         cv2.imshow("Landmark Canvas", landmark_canvas)
