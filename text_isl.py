@@ -40,6 +40,15 @@ class GPULandmarkDetector:
             min_tracking_confidence=0.3
         )
 
+        # Define a filtered list of connections for face outlines
+        self.FACEMESH_OUTLINE_CONNECTIONS = (
+            list(self.mp_face_mesh.FACEMESH_LIPS) +  # Mouth outline
+            list(self.mp_face_mesh.FACEMESH_LEFT_EYE) +  # Left eye outline
+            list(self.mp_face_mesh.FACEMESH_RIGHT_EYE) +  # Right eye outline
+            list(self.mp_face_mesh.FACEMESH_FACE_OVAL)+# Face outline
+            list(self.mp_face_mesh.FACEMESH_NOSE)  # Nose outline
+        )
+
     def preprocess_for_gpu(self, image):
         image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         return image_rgb.astype(np.uint8)
@@ -72,14 +81,9 @@ class GPULandmarkDetector:
 
         if face_mesh_landmarks:
             for face_landmarks in face_mesh_landmarks:
-                for id, lm in enumerate(face_landmarks.landmark):
-                    h, w, c = canvas.shape
-                    cx, cy = int(lm.x * w), int(lm.y * h)
-                    cv2.circle(canvas, (cx, cy), 1, face_color, cv2.FILLED)
-
-                for connection in self.mp_face_mesh.FACEMESH_CONTOURS:
-                    start_x, start_y = int(face_landmarks.landmark[connection[0]].x * w), int(face_landmarks.landmark[connection[0]].y * h)
-                    end_x, end_y = int(face_landmarks.landmark[connection[1]].x * w), int(face_landmarks.landmark[connection[1]].y * h)
+                for connection in self.FACEMESH_OUTLINE_CONNECTIONS:
+                    start_x, start_y = int(face_landmarks.landmark[connection[0]].x * canvas.shape[1]), int(face_landmarks.landmark[connection[0]].y * canvas.shape[0])
+                    end_x, end_y = int(face_landmarks.landmark[connection[1]].x * canvas.shape[1]), int(face_landmarks.landmark[connection[1]].y * canvas.shape[0])
                     cv2.line(canvas, (start_x, start_y), (end_x, end_y), face_color, 1)
 
         return canvas
