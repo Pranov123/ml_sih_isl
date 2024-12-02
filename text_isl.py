@@ -98,11 +98,13 @@ class GPULandmarkDetector:
         return canvas
 
 async def play_video(detector, video_path):
-    """Plays a video and applies landmark detection."""
+    """Plays a video and applies landmark detection, displaying FPS."""
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
         print(f"Error: Cannot open video file {video_path}")
         return
+
+    prev_time = 0  # To calculate the time between frames
 
     while True:
         ret, frame = cap.read()
@@ -112,12 +114,30 @@ async def play_video(detector, video_path):
         frame = cv2.resize(frame, (500, 500))
         landmark_canvas = detector.detect_landmarks(frame)
 
+        # Calculate FPS
+        curr_time = time.time()
+        fps = 1 / (curr_time - prev_time)
+        prev_time = curr_time
+
+        # Display FPS on the video frame
+        cv2.putText(
+            landmark_canvas, 
+            f"FPS: {int(fps)}", 
+            (10, 30), 
+            cv2.FONT_HERSHEY_SIMPLEX, 
+            1, 
+            (0, 255, 0), 
+            1, 
+            cv2.LINE_AA
+        )
+
         cv2.imshow("Landmark Canvas", landmark_canvas)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
     cap.release()
+    cv2.destroyAllWindows()
 
 async def fetch_and_play_video(detector, word, word_to_video_map):
     """Fetch and play a video for a word asynchronously."""
