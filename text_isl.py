@@ -5,10 +5,14 @@ import mediapipe as mp
 import torch
 import tensorflow as tf
 import time
+from collections import deque
+import concurrent.futures
+from dotenv import load_dotenv
 
 from utils.drive_link_placeholder import DRIVE_LINK_PLACEHOLDER
 from utils.connections import CONNECTIONS_NOT_NEEDED
 from utils.idselector import VIDEO_ID
+from text_isl_preprocessing import RailwaysAnnouncementPreprocessor
 
 class GPULandmarkDetector:
     def __init__(self):
@@ -101,75 +105,136 @@ class GPULandmarkDetector:
 
         return canvas
 
-async def play_video(detector, video_path):
-    """Plays a video and applies landmark detection, displaying FPS."""
+
+async def load_video_frames(video_path):
+    """Asynchronously loads video frames into memory and returns them as a list."""
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
         print(f"Error: Cannot open video file {video_path}")
-        return
+        return []
 
-    prev_time = 0  # To calculate the time between frames
-
+    frames = []
     while True:
         ret, frame = cap.read()
         if not ret:
             break
+        frame = cv2.resize(frame, (500, 500))  # Resize for consistency
+        frames.append(frame)
 
-        frame = cv2.resize(frame, (500, 500))
+    cap.release()
+    return frames
+
+
+def process_video(frames, detector, word):
+    """Processes a video by performing landmark detection on each frame."""
+    prev_time = 0
+    print(f"Streaming video for word: {word}")
+
+    for frame in frames:
+        # Detect landmarks
         landmark_canvas = detector.detect_landmarks(frame)
 
         # Calculate FPS
         curr_time = time.time()
-        fps = 1 / (curr_time - prev_time)
+        fps = 1 / (curr_time - prev_time) if prev_time > 0 else 0
         prev_time = curr_time
 
         # Display FPS on the video frame
         cv2.putText(
-            landmark_canvas, 
-            f"FPS: {int(fps)}", 
-            (10, 30), 
-            cv2.FONT_HERSHEY_SIMPLEX, 
-            1, 
-            (0, 255, 0), 
-            1, 
-            cv2.LINE_AA
+            landmark_canvas,
+            f"FPS: {int(fps)}",
+            (10, 470),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (0, 255, 0),
+            1,
+            cv2.LINE_AA,
+        )
+        
+        cv2.putText(
+            landmark_canvas,
+            f"Word: {word}",
+            (10, 60),  # Position below the FPS
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (255, 0, 0),  # Blue text
+            1,
+            cv2.LINE_AA,
         )
 
+        # Show the frame
         cv2.imshow("Landmark Canvas", landmark_canvas)
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        # Break on 'q' key
+        if cv2.waitKey(1) & 0xFF == ord("q"):
             break
 
-    cap.release()
     cv2.destroyAllWindows()
 
-async def fetch_and_play_video(detector, word, word_to_video_map):
-    """Fetch and play a video for a word asynchronously."""
-    video_path = word_to_video_map.get(word.lower())
-    if video_path:
-        print(f"Playing video for word: {word}")
-        await play_video(detector, video_path)
-    else:
-        print(f"No video mapped for word: {word}")
-        await asyncio.sleep(1)  # Add a small delay for unmapped words
 
-async def process_sentence(sentence, word_to_video_map):
-    """Processes a sentence and plays corresponding videos concurrently."""
+async def buffer_videos(queue, words, word_to_video_map):
+    """Continuously buffers video frames into the queue while maintaining sequence."""
+    buffer_index = 0  # Tracks which word is being buffered
+
+    while buffer_index < len(words):
+        if queue.full():
+            await asyncio.sleep(0.1)  # Wait until there's space in the buffer
+            continue
+
+        # Buffer the next video
+        word = words[buffer_index]
+        video_path = word_to_video_map.get(word)
+        if video_path:
+            print(f"Buffering video for: {word}")
+            frames = await load_video_frames(video_path)
+            await queue.put((frames, word))  # Add frames and word to the queue
+        else:
+            print(f"No video found for word: {word}")
+            await queue.put(([], word))  # Placeholder for missing videos
+
+        buffer_index += 1  # Move to the next word
+
+    # Signal that buffering is complete
+    await queue.put(None)  # None signals end of buffering
+
+
+async def stream_videos(queue, detector):
+    """Streams videos from the buffer asynchronously."""
+    with concurrent.futures.ThreadPoolExecutor() as pool:
+        while True:
+            item = await queue.get()  # Wait for frames and word from the buffer
+            if item is None:
+                print("Buffering complete. No more videos to stream.")
+                break  # Exit when buffering is done
+
+            frames, word = item
+            if not frames:
+                print(f"Skipping empty frames for word: {word}")
+                continue
+
+            print(f"Processing video for word: {word}")
+            # Process the video in a separate thread
+            await asyncio.get_event_loop().run_in_executor(pool, process_video, frames, detector, word)
+
+
+async def process_sentence(words, word_to_video_map):
+    """Processes a sentence and handles buffering and streaming concurrently."""
     detector = GPULandmarkDetector()
 
-    print(f"GPU Available: {detector.gpu_available}")
-    print(f"Using device: {detector.device}")
+    # Shared queue for buffering and streaming
+    queue = asyncio.Queue(maxsize=3)  # Buffer size of 3 videos
 
-    words = sentence.split()
+    # Create tasks for buffering and streaming
+    buffer_task = asyncio.create_task(buffer_videos(queue, words, word_to_video_map))
+    stream_task = asyncio.create_task(stream_videos(queue, detector))
 
-    # Create tasks to fetch and play videos concurrently
-    tasks = [fetch_and_play_video(detector, word, word_to_video_map) for word in words]
-    
-    # Run tasks concurrently
-    await asyncio.gather(*tasks)
+    # Run both tasks concurrently
+    await asyncio.gather(buffer_task, stream_task)
 
-# Usage
+# Example usage
 if __name__ == "__main__":
-    sentence = "what your name"
-    # Run the process asynchronously
-    asyncio.run(process_sentence(sentence, VIDEO_ID))
+    load_dotenv()
+    sentence = "Attention all, train shatabdi from platform 9B is leaving from Andhra Pradesh."
+    preprocessor = RailwaysAnnouncementPreprocessor()
+    words = preprocessor.preprocess(sentence)
+    asyncio.run(process_sentence(words, VIDEO_ID))
