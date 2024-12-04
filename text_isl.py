@@ -3,7 +3,6 @@ import cv2
 import numpy as np
 import mediapipe as mp
 import torch
-import tensorflow as tf
 import time
 from collections import deque
 import concurrent.futures
@@ -17,7 +16,6 @@ from text_isl_preprocessing import RailwaysAnnouncementPreprocessor
 class GPULandmarkDetector:
     def __init__(self):
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        self.gpu_available = tf.test.is_built_with_cuda()
         
         self.mp_pose = mp.solutions.pose
         self.mp_hands = mp.solutions.hands
