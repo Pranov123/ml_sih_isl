@@ -1,4 +1,4 @@
-from utils.constants import DRIVE_LINK_PLACEHOLDER
+from utils.drive_link_placeholder import DRIVE_LINK_PLACEHOLDER
 
 RAILWAY_IDS ={
     "may": DRIVE_LINK_PLACEHOLDER.format("1Srb37RLiSDpJc-PoXt0Iaaf-ARLzzBo1"),
