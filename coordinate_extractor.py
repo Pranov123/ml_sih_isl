@@ -1,8 +1,7 @@
 import mediapipe as mp
 import cv2
-import numpy as np
+import csv
 import json
-
 from utils.railway_dictionary import RAILWAY_IDS
 
 class CoordinateExtractor:
@@ -66,31 +65,46 @@ class CoordinateExtractor:
         cap.release()
         return frame_landmarks
 
-def save_coordinates_to_file(coordinate_data, output_file="coordinates.py"):
-    with open(output_file, "w") as f:
-        f.write("COORDINATES = ")
-        f.write(json.dumps(coordinate_data, indent=4))
-        
-def save_coordinates_to_json(coordinate_data, output_file="coordinates.json"):
+
+def save_coordinates_to_csv(coordinate_data, output_file="coordinates.csv"):
     """
-    Save extracted coordinate data to a JSON file.
+    Save coordinate data to a CSV file with word information.
     
-    :param coordinate_data: Dictionary containing the landmarks for each word
-    :param output_file: Path to the output JSON file
+    :param coordinate_data: Dictionary containing landmarks for each word.
+    :param output_file: Path to the output CSV file.
     """
-    with open(output_file, "w") as f:
-        json.dump(coordinate_data, f, indent=4)
+    with open(output_file, "w", newline="") as f:
+        writer = csv.DictWriter(
+            f,
+            fieldnames=["word", "frame", "pose", "hands"]
+        )
+        writer.writeheader()
+
+        for word, frames in coordinate_data.items():
+            for frame_idx, frame_data in enumerate(frames):
+                writer.writerow({
+                    "word": word,
+                    "frame": frame_idx,
+                    "pose": json.dumps(frame_data.get("pose", [])),  # Convert list to JSON string
+                    "hands": json.dumps(frame_data.get("hands", [])),  # Convert list to JSON string
+                })
+
+    print(f"Coordinates saved to {output_file}")
+
 
 
 if __name__ == "__main__":
-    word_to_video_map = RAILWAY_IDS
+    word_to_video_map = RAILWAY_IDS # Mapping of words to video paths
 
     extractor = CoordinateExtractor()
-    coordinates = {}
+    all_coordinates = {}  # Initialize an empty dictionary
 
+    # Extract coordinates for each word
     for word, video_path in word_to_video_map.items():
         print(f"Processing word: {word}")
-        coordinates[word] = extractor.extract_coordinates(video_path)
+        coordinates = extractor.extract_coordinates(video_path)
+        all_coordinates[word] = coordinates  # Associate the word with its coordinates
 
-    save_coordinates_to_json(coordinates, output_file="coordinates.json")
-    print("Coordinates saved to coordinates.json")
+    # Save to CSV
+    save_coordinates_to_csv(all_coordinates, output_file="coordinates.csv")
+
