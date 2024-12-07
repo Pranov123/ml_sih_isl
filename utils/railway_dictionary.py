@@ -121,4 +121,6 @@ RAILWAY_IDS ={
     "bihar": DRIVE_LINK_PLACEHOLDER.format("1w0tT2k5DOMieIxksLCQY7ar97WpNTvm6"),
     "world": DRIVE_LINK_PLACEHOLDER.format("1cTCPZ-Lw2j5lA0S6DtRdNEn6buw9r77f"),
     "india": DRIVE_LINK_PLACEHOLDER.format("1h9up9OFHc6XRVi9ilD2seS1ccNlrRsI3"),
+    "rajdhani": DRIVE_LINK_PLACEHOLDER.format("1Zl99McpbsuG3Pki30GZcieNhYcYHoh_J"),
+    "rajdhani express":DRIVE_LINK_PLACEHOLDER.format("1Zl99McpbsuG3Pki30GZcieNhYcYHoh_J"),
 }
