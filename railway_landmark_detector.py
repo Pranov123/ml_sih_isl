@@ -138,6 +138,7 @@ def main():
     sentence = "Attention all, train shatabdi from platform 9B is leaving from Andhra Pradesh."
     preprocessor = RailwaysAnnouncementPreprocessor()
     words = preprocessor.preprocess(sentence)
+    print(words)
     render_sentence(words)
 
 if __name__ == '__main__':

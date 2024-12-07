@@ -81,6 +81,7 @@ class RailwaysAnnouncementPreprocessor:
          ### Important:
          - **NO PREAMBLE OR EXPLANATIONS** in your response.
          - Only return the processed tokens in a **Python list format**.
+         - You are not to return code.
          - Any deviation will result in severe penalties.
 
          Now process the sentence according to these instructions.
@@ -95,7 +96,7 @@ class RailwaysAnnouncementPreprocessor:
       keys = eval(response.content)
       final_keys = []
       for key in keys:
-        if key in VIDEO_ID.keys():
+        if key in RAILWAY_IDS.keys():
             final_keys.append(key)
         elif key == ' ':
             continue
@@ -107,5 +108,5 @@ class RailwaysAnnouncementPreprocessor:
 if __name__ == "__main__":
    load_dotenv()
    preprocessor = RailwaysAnnouncementPreprocessor()
-   sentence = "Attention all, train shatabdi from platform 9B is leaving from Andhra Pradesh."
+   sentence = "Attention all, train vande bharat from platform 9B is leaving from Andhra Pradesh."
    print(preprocessor.preprocess(sentence))
