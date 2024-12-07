@@ -3,9 +3,10 @@ from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
 from utils.idselector import VIDEO_ID
+from utils.railway_dictionary import RAILWAY_IDS
 
 class RailwaysAnnouncementPreprocessor:
-   def __init__(self, dictionary=VIDEO_ID):
+   def __init__(self, dictionary=RAILWAY_IDS):
       self.multi_word_dict = {key: value for key, value in dictionary.items() if len(key.split()) > 1}
       self.stop_words = [
          "a", "an", "the","by", 
