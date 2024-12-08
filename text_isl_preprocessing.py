@@ -2,12 +2,13 @@ import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
+from langchain_openai import ChatOpenAI
 from utils.idselector import VIDEO_ID
 from utils.railway_dictionary import RAILWAY_IDS
 
 class RailwaysAnnouncementPreprocessor:
    def __init__(self, dictionary=RAILWAY_IDS):
-      self.multi_word_dict = {key: value for key, value in dictionary.items() if len(key.split()) > 1}
+      self.multi_word_list = [key for key, value in dictionary.items() if len(key.split()) > 1]
       self.stop_words = [
          "a", "an", "the","by", 
          "is", "am", "are", "was", "were", "be", "been", "being", 
@@ -16,7 +17,15 @@ class RailwaysAnnouncementPreprocessor:
          "and", "or", "nor", "so", "for", "yet", 
          "oh", "uh", "um", "ah", "wow", 
       ]
-      self.llm = ChatGroq(model="llama-3.1-70b-versatile")
+      self.number_words = {
+      "zero": 0, "one": 1, "two": 2, "three": 3, "four": 4,
+      "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9,
+      "ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13,
+      "fourteen": 14, "fifteen": 15, "sixteen": 16, "seventeen": 17,
+      "eighteen": 18, "nineteen": 19, "twenty": 20
+      }
+      # self.llm = ChatOpenAI(model='gpt-4o')
+      self.llm = ChatGroq(model='llama-3.3-70b-versatile')
     
    def preprocess(self, sentence):
       sentence = " ".join([word.lower() for word in sentence.split() if word.lower() not in self.stop_words])
@@ -32,7 +41,7 @@ class RailwaysAnnouncementPreprocessor:
 
          ### Inputs:
          - Sentence: {sentence}
-         - Dictionary: {dictionary}
+         - List: {list}
 
          ### Steps:
 
@@ -49,9 +58,9 @@ class RailwaysAnnouncementPreprocessor:
             - **DO NOT SKIP lemmatization for any words. Each word MUST be processed.**
 
          2. **Context-Based Tokenization**:
-            - Treat multi-word phrases from the dictionary as single tokens.
+            - Treat multi-word phrases from the list as single tokens.
             - Rules:
-            - Multi-word phrases in the dictionary (e.g., "how many") should NOT be tokenized into separate words ("how" and "many").
+            - Multi-word phrases in the list (e.g., "how many") should NOT be tokenized into separate words ("how" and "many").
             - If no multi-word match is found, proceed with normal tokenization.
             - They must not be capitalized or altered in any way.
 
@@ -67,20 +76,28 @@ class RailwaysAnnouncementPreprocessor:
             - Break time into individual digits.
             - Replace abbreviations with their expanded forms:
             - Example: "no." → "number", "P/F" → "platform".
+            - Alphabets which are part of the token should be retained as they are.
+            - Example: "9 B" → `9`, `B`.
 
          5. **Combine Tokens**:
             - Retain the sequential order of the sentence while ensuring the output contains ISL-friendly tokens.
 
-         ### Example Input and Output:
+         ### Example Inputs and Outputs:
          Input:
          "Attention all, train no. 1675, Rajdhani from platform 9B is leaving from Andhra Pradesh at 12:45."
 
          Output:
          ['attention', 'all', 'train', 'number', '1', '6', '7', '5', 'rajdhani', 'from', 'platform', '9', 'B', 'leave', 'from', 'andhra pradesh', 'at', '1', '2', '4', '5']
+         
+         Input:
+         "Attention all, train no. 1675, Rajdhani from platform nine B is leaving from Madhya Pradesh at 12:45."
+
+         Output:
+         ['attention', 'all', 'train', 'number', '1', '6', '7', '5', 'rajdhani', 'from', 'platform', '9', 'B', 'leave', 'from', 'madhya pradesh', 'at', '1', '2', '4', '5']
 
          ### Important:
          - **NO PREAMBLE OR EXPLANATIONS** in your response.
-         - Only return the processed tokens in a **Python list format**.
+         - Only return the processed tokens in a **list format**.
          - You are not to return code.
          - Any deviation will result in severe penalties.
 
@@ -89,8 +106,9 @@ class RailwaysAnnouncementPreprocessor:
       
       prompt = prompt_template.invoke({
          'sentence': sentence,
-         'dictionary': self.multi_word_dict,
+         'list': str(self.multi_word_list),
       })
+      print("Prompt",prompt,end="\n\n")
       
       response = self.llm.invoke(prompt)
       keys = eval(response.content)
@@ -98,6 +116,8 @@ class RailwaysAnnouncementPreprocessor:
       for key in keys:
         if key in RAILWAY_IDS.keys():
             final_keys.append(key)
+        elif key in self.number_words.keys():
+            final_keys.append(str(self.number_words[key]))
         elif key == ' ':
             continue
         else:
