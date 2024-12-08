@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
+from langchain_openai import ChatOpenAI
 from utils.idselector import VIDEO_ID
 from utils.railway_dictionary import RAILWAY_IDS
 
@@ -24,8 +25,10 @@ class RailwaysAnnouncementPreprocessor:
       "fourteen": 14, "fifteen": 15, "sixteen": 16, "seventeen": 17,
       "eighteen": 18, "nineteen": 19, "twenty": 20
       }
-      # self.llm = ChatOpenAI(model='gpt-4o')
-      self.llm = ChatGroq(model='llama-3.3-70b-versatile')
+      # self.llm = ChatOpenAI(model='gpt-4o-mini')
+      self.llm = ChatGroq(model='llama-3.1-70b-versatile')
+      # self.llm = ChatGroq(model='llama-3.3-70b-versatile')
+
       
    def multi_word_matcher(self,sentence):
       prompt_template = PromptTemplate.from_template("""
@@ -78,18 +81,20 @@ class RailwaysAnnouncementPreprocessor:
       ### Inputs:
       - Sentence: {sentence}
       - List: {list} (Preserve the words in list as they are in the output, they must be treated as a single token, refer the example to understand better).
-
+      
       ### Steps:
 
       1. **Lemmatize Tokens**:
          - Perform **lemmatization using part-of-speech tagging (POS)**.
          - Ensure all tokens are lemmatized to their root forms based on their context and part of speech. 
+         - The word 'I' (first person pronoun) should be lemmatized to 'me' always.
          - Examples:
          - "leaving/left" → "leave"
          - "platforms" → "platform"
          - "assisting" → "assist"
          - "requested" → "request"
          - "departing/departed" → "depart"
+         - "arriving" → "arrive"
          - "flies" → "fly" (if referring to the verb).
          - **DO NOT SKIP lemmatization for any words. Each word MUST be processed.**
 
@@ -147,5 +152,5 @@ class RailwaysAnnouncementPreprocessor:
 if __name__ == "__main__":
    load_dotenv()
    preprocessor = RailwaysAnnouncementPreprocessor()
-   sentence = "Attention all passengers , train vande bharat from platform 9B is leaving from kerala."
+   sentence = "May I have your attention please, train no 1975 is arriving from at platform 9B."
    print(preprocessor.preprocess(sentence.lower()))
