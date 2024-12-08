@@ -2,8 +2,42 @@ import requests
 import base64
 from dotenv import load_dotenv
 import os
+import sounddevice as sd
+import numpy as np
+import io
+import wave
+import json
 
 load_dotenv()
+
+def record_audio_to_base64(duration=5, samplerate=16000, channels=1):
+    """
+    Records audio in real-time, converts it to base64-encoded string.
+
+    Parameters:
+    - duration (int): Duration to record in seconds.
+    - samplerate (int): Sampling rate of audio.
+    - channels (int): Number of audio channels.
+
+    Returns:
+    - str: Base64-encoded audio string.
+    """
+    print("Recording... Speak now!")
+    audio_data = sd.rec(int(samplerate * duration), samplerate=samplerate, channels=channels, dtype=np.int16)
+    sd.wait()  # Wait for recording to finish
+    print("Recording finished.")
+
+    # Save audio data to a buffer in WAV format
+    buffer = io.BytesIO()
+    with wave.open(buffer, 'wb') as wf:
+        wf.setnchannels(channels)
+        wf.setsampwidth(2)  # 2 bytes per sample for np.int16
+        wf.setframerate(samplerate)
+        wf.writeframes(audio_data.tobytes())
+
+    # Encode buffer content to base64
+    base64_audio = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    return base64_audio
 
 def speech_to_text(base64_audio,language_code="ta-IN"):
     """
@@ -43,7 +77,6 @@ def speech_to_text(base64_audio,language_code="ta-IN"):
     except requests.exceptions.RequestException as e:
         return {"error": str(e)}
 
-
 def speech_to_text_translate(base64_audio):
     """
     Sends a base64-encoded audio file to the speech-to-text API and returns the transcribed text in english.
@@ -61,7 +94,6 @@ def speech_to_text_translate(base64_audio):
 
     data = {
         "model": "saaras:v1",
-        "prompt":"The audio file will always be in Tamil language.",
     }
 
     files = {
@@ -78,12 +110,9 @@ def speech_to_text_translate(base64_audio):
     except requests.exceptions.RequestException as e:
         return {"error": str(e)}
 
-# Sample usage
-file_path = "sample_input2.wav"  # 'Am i in the right place?'
 
-base64_audio = ""
-with open(file_path, "rb") as audio_file:
-    base64_audio = base64.b64encode(audio_file.read()).decode("utf-8")
+base64_audio = record_audio_to_base64()
 
-print(speech_to_text(base64_audio))
-print(speech_to_text_translate(base64_audio))
+# Call the speech-to-text function
+transcription = speech_to_text_translate(base64_audio)
+print("Transcription:", transcription)
