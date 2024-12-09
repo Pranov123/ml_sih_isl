@@ -1,6 +1,6 @@
 from utils.drive_link_placeholder import DRIVE_LINK_PLACEHOLDER
 
-med_dict={"plaster": DRIVE_LINK_PLACEHOLDER.format("1XPexwSugldZccJVxzbIJ4U0w_oocWFWB"),
+MED_VIDEO_IDS={"plaster": DRIVE_LINK_PLACEHOLDER.format("1XPexwSugldZccJVxzbIJ4U0w_oocWFWB"),
 "platelet": DRIVE_LINK_PLACEHOLDER.format("11yzdSc8i0aI8KVXM816BvQlPGIzKVoc1"),
 "guinea pig": DRIVE_LINK_PLACEHOLDER.format("18ggJCgc8OwK8mDQ9bGBBeajotxgJ2ghC"),
 "blood bank refrigerator": DRIVE_LINK_PLACEHOLDER.format("1T5b6VI0MKNLGjL-rKKq6JPcdgqhY-mT5"),
@@ -441,6 +441,8 @@ med_dict={"plaster": DRIVE_LINK_PLACEHOLDER.format("1XPexwSugldZccJVxzbIJ4U0w_oo
 "liver cancer": DRIVE_LINK_PLACEHOLDER.format("1yFoV8lLZhNKkuRXdQdG0WptEhvsXKDuQ"),
 "binge eating": DRIVE_LINK_PLACEHOLDER.format("1uqoszfgDuYXGn61Ej6fMufUyiZsJsuTl"),
 "x-ray viewer": DRIVE_LINK_PLACEHOLDER.format("1h_cCo5Lj7sknpwZcIjbRJqdsyrZNCxla"),
+"through": DRIVE_LINK_PLACEHOLDER.format("1iAxDloQpu5LNdAz9i3qgRYHmvjpARzzO"),
+"via": DRIVE_LINK_PLACEHOLDER.format("1iAxDloQpu5LNdAz9i3qgRYHmvjpARzzO"),
 "erythrocyte red blood cell": DRIVE_LINK_PLACEHOLDER.format("1AT7h5s4Td31BEwwKtkQwF6jq49g_5ZPr"),
 "sunscreen": DRIVE_LINK_PLACEHOLDER.format("1P9ieKJROSt0VsWGGhhheNUvtm9yMsQoV"),
 "aorta": DRIVE_LINK_PLACEHOLDER.format("1cfunKJpEsn0BpKExfRhAwoB4Vlg8W8fv"),
@@ -3659,6 +3661,7 @@ med_dict={"plaster": DRIVE_LINK_PLACEHOLDER.format("1XPexwSugldZccJVxzbIJ4U0w_oo
 "overdraft": DRIVE_LINK_PLACEHOLDER.format("1fA-k6XYrR5ww7GrucxIQQUW3RrUR-a97"),
 "opuntia": DRIVE_LINK_PLACEHOLDER.format("1c2zmXBTki3HE7BWjwBOYM9SXblvF4a8C"),
 "olericulture": DRIVE_LINK_PLACEHOLDER.format("1grkflBD8g28o9a6dYrsOmDFbbWG9waTT"),
+"or":DRIVE_LINK_PLACEHOLDER.format("1kzuH3POZQrS2SYiZJW-SM8o7uB8Sn0Px"),
 "oxidation": DRIVE_LINK_PLACEHOLDER.format("1avtWCXE7JFDiLzaNbFB5aKwgyQkIjIv8"),
 "ovi-viviparous": DRIVE_LINK_PLACEHOLDER.format("11tP-5DrdNCSR4kT0HyKTFUSXUamHTlEA"),
 "oviparous": DRIVE_LINK_PLACEHOLDER.format("1_CM6Ml4YezPdjgN8Dp_CKezpH8RcExmd"),
@@ -5287,6 +5290,7 @@ med_dict={"plaster": DRIVE_LINK_PLACEHOLDER.format("1XPexwSugldZccJVxzbIJ4U0w_oo
 "washerman": DRIVE_LINK_PLACEHOLDER.format("1-_b7gjPmkHC9-s5e-H036AFDt5jDNyHX"),
 "work": DRIVE_LINK_PLACEHOLDER.format("1bkDF8h9g9Cexy6tU3x5FCPqybXM45HMj"),
 "without": DRIVE_LINK_PLACEHOLDER.format("1S570mFlId3HfncwKGGnx5Cw6Ni-AWV5h"),
+"with": DRIVE_LINK_PLACEHOLDER.format("1Kh2WPp6mt04Yk9fxbjxA-CeWhBSilamd"),
 "win": DRIVE_LINK_PLACEHOLDER.format("1HfmRp0dsrK6fV1XiZlrzWTYL6qGbRrQh"),
 "while": DRIVE_LINK_PLACEHOLDER.format("1ZZ3sX7zA1bbK7yuCSuLoIzcEIaBH77eP"),
 "weekly": DRIVE_LINK_PLACEHOLDER.format("1TRAPFyDjHIxYfJfF1Qw-KVgjF6vrtLuV"),

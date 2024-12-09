@@ -1,0 +1,1 @@
+DRIVE_LINK_PLACEHOLDER="https://drive.google.com/uc?export=download&id={}"
