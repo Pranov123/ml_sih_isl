@@ -1,3 +1,5 @@
+from utils.drive_link_placeholder import DRIVE_LINK_PLACEHOLDER
+
 med_dict={"plaster": DRIVE_LINK_PLACEHOLDER.format("1XPexwSugldZccJVxzbIJ4U0w_oocWFWB"),
 "platelet": DRIVE_LINK_PLACEHOLDER.format("11yzdSc8i0aI8KVXM816BvQlPGIzKVoc1"),
 "guinea pig": DRIVE_LINK_PLACEHOLDER.format("18ggJCgc8OwK8mDQ9bGBBeajotxgJ2ghC"),
