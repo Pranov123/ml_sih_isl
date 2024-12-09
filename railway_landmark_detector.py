@@ -120,22 +120,31 @@ def render_sentence(words, renderer=None, coordinates_file="coordinates.csv"):
             # Prepare landmarks
             pose_landmarks = ast.literal_eval(row['pose']) if row['pose'] != '[]' else None
             hand_landmarks = ast.literal_eval(row['hands']) if row['hands'] != '[]' else None
+            
+            # Display the word in the bottom-left corner
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            font_scale = 1
+            font_thickness = 2
+            text_color = (0, 0, 0)  # Black text
+            position = (10, canvas.shape[0] - 10)  # Bottom-left corner
 
             # Render landmarks
             canvas = renderer.render_landmarks(canvas, pose_landmarks, hand_landmarks)
 
+            cv2.putText(canvas, word, position, font, font_scale, text_color, font_thickness)
+            
             # Display canvas
             cv2.imshow("Rendered Landmarks", canvas)
 
             # Press 'q' to quit early
-            if cv2.waitKey(30) & 0xFF == ord("q"):
+            if cv2.waitKey(10) & 0xFF == ord("q"):
                 return
 
     cv2.destroyAllWindows()
 
 def main():    
     # Render landmarks for the sentence
-    sentence = "Attention all, train shatabdi from platform 9B is leaving from Andhra Pradesh."
+    sentence = "Attention all, train rajdhani from platform 9B is leaving from Andhra Pradesh."
     preprocessor = RailwaysAnnouncementPreprocessor()
     words = preprocessor.preprocess(sentence)
     print(words)
