@@ -272,6 +272,7 @@ MED_VIDEO_IDS={"plaster": DRIVE_LINK_PLACEHOLDER.format("1XPexwSugldZccJVxzbIJ4U
 "vitamin b3": DRIVE_LINK_PLACEHOLDER.format("1JXiWcV3qIWn1wOxmN5F5BtdO03AhSvOB"),
 "brain": DRIVE_LINK_PLACEHOLDER.format("1wGcZ2vb4wUYAj-Jmn9RSpP3sLHfJBI80"),
 "color blindness": DRIVE_LINK_PLACEHOLDER.format("1nre9EKxlE5DzQo2fBS9qScP_G4bKZoy1"),
+"brain tumor": DRIVE_LINK_PLACEHOLDER.format("1hEjxjk59bl8Sw7BaSPb5bF32BEv58vjJ"),
 "brain tumor outside": DRIVE_LINK_PLACEHOLDER.format("1hEjxjk59bl8Sw7BaSPb5bF32BEv58vjJ"),
 "crutches": DRIVE_LINK_PLACEHOLDER.format("1w_6Kk64scAV22Rm7oyDlaLzgL68Tk_qU"),
 "contagions disease": DRIVE_LINK_PLACEHOLDER.format("1JBStHctRz24tjLDHdDMpBjjLUOKGSV6q"),
