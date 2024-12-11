@@ -108,6 +108,18 @@ def speech_to_text_original(base64_audio,language_code):
         return response.json()
     except requests.exceptions.RequestException as e:
         return {"error": str(e)}
+
+def wavToBase64(wav_file_path):
+    # Open the WAV file in binary mode
+    with open(wav_file_path, 'rb') as wav_file:
+        # Read the file contents
+        wav_data = wav_file.read()
+        
+        # Convert the WAV file data to Base64
+        base64_wav = base64.b64encode(wav_data).decode('utf-8')
+        
+    return base64_wav
+
  
 if __name__ == "__main__":
         
