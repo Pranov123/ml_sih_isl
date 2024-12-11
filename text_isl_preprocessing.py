@@ -45,8 +45,8 @@ class RailwaysAnnouncementPreprocessor:
          - Extract all multi-word phrases from the list that are present in the sentence as-is.  
 
       2. **Return Matches**:
-         - Output the matched multi-word phrases in a **list format** ONLY if they are present in the list.
-         - If no matches are found, return an empty list.
+         - Output the matched multi-word phrases in a **list format** ONLY and not in code format if they are present in the list.
+         - If no matches are found, return an empty list and NOTHING ELSE.
  
       ### Example:  
 
@@ -55,6 +55,10 @@ class RailwaysAnnouncementPreprocessor:
 
       #### Output:  
       ['andhra pradesh'] (because it's present in the list)
+      
+      ### Input : "Listen please, train number 173 destination to mumbai started from chennai arrive at platform number 3"
+      
+      ### Output: []
       
       NO PRELUDE OR EXPLANATION. Just return the matched multi-word phrases in a list format.
       """)
@@ -152,5 +156,5 @@ class RailwaysAnnouncementPreprocessor:
 if __name__ == "__main__":
    load_dotenv()
    preprocessor = RailwaysAnnouncementPreprocessor()
-   sentence = "May I have your attention please, train no 1975 is arriving from at platform 9B."
-   print(preprocessor.preprocess(sentence.lower()))
+   sentence = "Listen please, train number 173 destination to uttar pradesh started from chennai arrive at platform number 3"
+   print(preprocessor.preprocess(sentence))
