@@ -137,14 +137,14 @@ def render_sentence(words, renderer=None, coordinates_file="coordinates.csv"):
             cv2.imshow("Rendered Landmarks", canvas)
 
             # Press 'q' to quit early
-            if cv2.waitKey(10) & 0xFF == ord("q"):
+            if cv2.waitKey(15) & 0xFF == ord("q"):
                 return
 
     cv2.destroyAllWindows()
 
 def main():    
     # Render landmarks for the sentence
-    sentence = "Attention all, train rajdhani from platform 9B is leaving from Andhra Pradesh."
+    sentence = "Listen please, train number 173 destination to mumbai started from chennai arrive at platform number 3"
     preprocessor = RailwaysAnnouncementPreprocessor()
     words = preprocessor.preprocess(sentence)
     print(words)
