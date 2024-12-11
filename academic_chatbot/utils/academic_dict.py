@@ -1,4 +1,6 @@
-aca_dict={"food chain": DRIVE_LINK_PLACEHOLDER.format("1Z7wmzdujSls_pQkAWf_ny9_Gmor8l4qF"),
+DRIVE_LINK_PLACEHOLDER="https://drive.google.com/uc?export=download&id={}"
+
+ACA_DICT={"food chain": DRIVE_LINK_PLACEHOLDER.format("1Z7wmzdujSls_pQkAWf_ny9_Gmor8l4qF"),
 "organic": DRIVE_LINK_PLACEHOLDER.format("1T1XeWIMf0tOcUv7I4WU_yXr-aGpah4oV"),
 "natural gas": DRIVE_LINK_PLACEHOLDER.format("10nr643t80FFLBGTsvEiRIFH7Uk7FQda4"),
 "noun": DRIVE_LINK_PLACEHOLDER.format("1Cjm3TxKAGqn8ZHzh8tIHEvMtp5RcrpPI"),
@@ -831,7 +833,7 @@ aca_dict={"food chain": DRIVE_LINK_PLACEHOLDER.format("1Z7wmzdujSls_pQkAWf_ny9_G
 "Ante Meridian and Post Meridian": DRIVE_LINK_PLACEHOLDER.format("1AiyfFn24uLLRhsjADlQLTwoPI0PaU7be"),
 "creepers": DRIVE_LINK_PLACEHOLDER.format("1yRuXBy62UGvkslD2DwGvosI5hKBcfXDR"),
 "filtration separation technique": DRIVE_LINK_PLACEHOLDER.format("1K0_TUhrjXbynX_NJ_OePbsVh8Yz372gq"),
-"mummification": DRIVE_LINK_PLACEHOLDER.format("1hl2ftk3AQn7aj_G7hy3VVYt1krFg7qXA")
+"mummification": DRIVE_LINK_PLACEHOLDER.format("1hl2ftk3AQn7aj_G7hy3VVYt1krFg7qXA"),
 "anemometer": DRIVE_LINK_PLACEHOLDER.format("1U-R3V89qbKDIQL_2vjKxyoQQBqs9C6nF"),
     "anode": DRIVE_LINK_PLACEHOLDER.format("1ly-Jgn8pLB4JbjRAH7h8ULLnvB7n9inP"),
     "anion": DRIVE_LINK_PLACEHOLDER.format("1bFKKBJuf7rqTu4e5C9__-ev5UGozAp5G"),
