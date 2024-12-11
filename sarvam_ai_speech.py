@@ -108,13 +108,20 @@ def speech_to_text_original(base64_audio,language_code):
         return response.json()
     except requests.exceptions.RequestException as e:
         return {"error": str(e)}
+ 
+if __name__ == "__main__":
+        
+    base64_audio = record_audio_to_base64()
+    # base64_audio = wavToBase64("sample_input.wav")
 
-# base64_audio = record_audio_to_base64()
-base64_audio = wavToBase64("sample_input.wav")
+    # Call the speech-to-text function
+    response = speech_to_text_translate(base64_audio)
+    print("Transcription:", response[0],response[1])
 
-# Call the speech-to-text function
-response = speech_to_text_translate(base64_audio)
-print("Transcription:", response[0],response[1])
-if response[1] != "en":
-    response_original = speech_to_text_original(base64_audio,response[1])
-    print("Transcription in original number:", response_original)
+    if response[1] == None:
+        print('No language detected')
+        response[1] = 'en-IN'
+
+    if response[1] != "en-IN":
+        response_original = speech_to_text_original(base64_audio,response[1])
+        print("Transcription in original number:", response_original)
