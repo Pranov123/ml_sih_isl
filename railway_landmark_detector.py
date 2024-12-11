@@ -144,7 +144,7 @@ def render_sentence(words, renderer=None, coordinates_file="coordinates.csv"):
 
 def main():    
     # Render landmarks for the sentence
-    sentence = "Listen please, train number 173 destination to mumbai started from chennai arrive at platform number 3"
+    sentence = "Attention all, train rajdhani from platform 9B is leaving from Andhra Pradesh."
     preprocessor = RailwaysAnnouncementPreprocessor()
     words = preprocessor.preprocess(sentence)
     print(words)
