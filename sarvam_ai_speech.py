@@ -1,3 +1,4 @@
+import base64
 import requests
 import base64
 from dotenv import load_dotenv
@@ -10,7 +11,7 @@ import json
 
 load_dotenv()
 
-def record_audio_to_base64(duration=10, samplerate=16000, channels=1):
+def record_audio_to_base64(duration=6, samplerate=16000, channels=1):
     """
     Records audio in real-time, converts it to base64-encoded string.
 
@@ -68,13 +69,52 @@ def speech_to_text_translate(base64_audio):
 
     try:
         response = requests.post(url, data=data, files=files,headers=headers)
-        return response.json()['transcript']
+        return [response.json()['transcript'],response.json()['language_code']]
     except requests.exceptions.RequestException as e:
         return {"error": str(e)}
 
+def speech_to_text_original(base64_audio,language_code):
+    
+    """
+    Sends a base64-encoded audio file to the speech-to-text API and returns the transcribed text in original language.
+    
+    Link: https://sarvam.ai/docs/speech-to-text-translate
 
-base64_audio = record_audio_to_base64()
+    Parameters:
+    - base64_audio (str): Base64-encoded audio content.
+    - language_code (str): Language code of the audio content.
+
+    Returns:
+    - str: Transcribed text or error message from the API.
+    """
+    
+    url = " https://api.sarvam.ai/speech-to-text"
+
+    data = {
+        "model": "saarika:v1",
+        "language_code": language_code
+    }
+
+    files = {
+        "file": ("input.wav", base64.b64decode(base64_audio), "audio/wav"),
+    }
+
+    headers = {
+    'api-subscription-key': os.getenv('SARVAM_API_KEY')
+    }
+
+    try:
+        response = requests.post(url, data=data, files=files,headers=headers)
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        return {"error": str(e)}
+
+# base64_audio = record_audio_to_base64()
+base64_audio = wavToBase64("sample_input.wav")
 
 # Call the speech-to-text function
-transcription = speech_to_text_translate(base64_audio)
-print("Transcription:", transcription)
+response = speech_to_text_translate(base64_audio)
+print("Transcription:", response[0],response[1])
+if response[1] != "en":
+    response_original = speech_to_text_original(base64_audio,response[1])
+    print("Transcription in original number:", response_original)
