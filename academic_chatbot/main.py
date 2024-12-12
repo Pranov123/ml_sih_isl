@@ -14,9 +14,10 @@ import torch
 import time
 import concurrent.futures
 from collections import deque
-from utils.idselector import ACA_DICT
+from helper.idselector import ACA_DICT
 from gpu_landmark_renderer import GPULandmarkDetector
-
+from langchain_groq import ChatGroq
+import os
 
 async def load_video_frames(video_path):
     """Asynchronously loads video frames into memory and returns them as a list."""
@@ -168,19 +169,19 @@ chat_history = [
 # Function to simulate a continual chat
 def continual_chat():
     print("Start chatting with the AI! Type 'exit' to end the conversation.")
-    chat_history = []  # Collect chat history here (a sequence of messages)
     while True:
         query = input("You: ")
         if query.lower() == "exit":
             break
         # Process the user's query through the retrieval chain
-        result = rag_chain.invoke({"input": query, "chat_history": chat_history})
+        chat_history.append(HumanMessage(content=query.lower()))
+        result = llm.invoke(chat_history)
         # Display the AI's response
-        print(f"AI: {result['answer']}")
+        print(f"AI: {result.content}")
         # Update the chat history
         
         words = []
-        for word in result["answer"].lower().replace(",","").replace(".","").replace("  "," ").split():
+        for word in result.content.lower().replace(",","").replace(".","").replace("  "," ").split():
             if word not in ACA_DICT.keys():
                 for letter in word:
                     words.append(letter.upper())
@@ -189,12 +190,12 @@ def continual_chat():
                 words.append(word)
         print(words)
         
-        asyncio.run(process_sentence(words, MED_VIDEO_IDS))
+        asyncio.run(process_sentence(words, ACA_DICT))
         
-        chat_history.append(HumanMessage(content=query))
-        chat_history.append(AIMessage(content=result["answer"]))
+        chat_history.append(AIMessage(content=result.content))
 
 
 # Main function to start the continual chat
 if __name__ == "__main__":
     continual_chat()
+    # print(os.listdir())
