@@ -8,8 +8,8 @@ from collections import deque
 import concurrent.futures
 from dotenv import load_dotenv
 
-from utils.drive_link_placeholder import DRIVE_LINK_PLACEHOLDER
-from utils.connections import CONNECTIONS_NOT_NEEDED
+from helper.drive_link_placeholder import DRIVE_LINK_PLACEHOLDER
+from helper.connections import CONNECTIONS_NOT_NEEDED
 
 class GPULandmarkDetector:
     def __init__(self):

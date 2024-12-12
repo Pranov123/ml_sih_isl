@@ -1,4 +1,4 @@
-from utils.drive_link_placeholder import DRIVE_LINK_PLACEHOLDER
+from helper.drive_link_placeholder import DRIVE_LINK_PLACEHOLDER
 
 MED_VIDEO_IDS={"plaster": DRIVE_LINK_PLACEHOLDER.format("1XPexwSugldZccJVxzbIJ4U0w_oocWFWB"),
 "platelet": DRIVE_LINK_PLACEHOLDER.format("11yzdSc8i0aI8KVXM816BvQlPGIzKVoc1"),
@@ -2024,6 +2024,7 @@ MED_VIDEO_IDS={"plaster": DRIVE_LINK_PLACEHOLDER.format("1XPexwSugldZccJVxzbIJ4U
 "demolishing": DRIVE_LINK_PLACEHOLDER.format("1DtZesJwbeVEdeBG9zTdvLJMSd_tmY7SX"),
 "denmark": DRIVE_LINK_PLACEHOLDER.format("14h9f5RWELlTvT0Tivliz0XAN0Wda9xqR"),
 "drug": DRIVE_LINK_PLACEHOLDER.format("1LnUK2CQl9Ih-7wUuka0mrh-GYPHCjxGI"),
+"drugs": DRIVE_LINK_PLACEHOLDER.format("1LnUK2CQl9Ih-7wUuka0mrh-GYPHCjxGI"),
 "diving": DRIVE_LINK_PLACEHOLDER.format("1331Jbc4DwqVbjqX8ohcjspfWxNlKX-tD"),
 "dial": DRIVE_LINK_PLACEHOLDER.format("1Gk3rz2YN7PE1hM3JPpywSftDeYE4On_h"),
 "demand": DRIVE_LINK_PLACEHOLDER.format("1Wgucqlsge_la9p6EHs4WK6K-6jMFWUq1"),

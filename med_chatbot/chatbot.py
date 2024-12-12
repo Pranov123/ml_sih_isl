@@ -12,7 +12,7 @@ from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
-from utils.idselector import MED_VIDEO_IDS
+from helper.idselector import MED_VIDEO_IDS
 from gpu_landmark_renderer import GPULandmarkDetector
 
 

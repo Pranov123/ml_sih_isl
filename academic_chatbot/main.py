@@ -5,6 +5,7 @@ from langchain_community.vectorstores import Chroma
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_huggingface import HuggingFaceEmbeddings
+from preprocessing import find_most_similar_word
 
 import asyncio
 import cv2
@@ -171,34 +172,37 @@ def continual_chat():
     print("Start chatting with the AI! Type 'exit' to end the conversation.")
     first_input = input("Enter what you want to know about: ")
     word = first_input.lower()
+
+    most_similar_word, similarity = find_most_similar_word(word)
+    print(most_similar_word, similarity)
     
-    print("Would you like to ask any follow up questions?")
+    # print("Would you like to ask any follow up questions?")
     
-    asyncio.run(process_sentence([word], ACA_DICT))
-    while True:
-        query = input("You: ")
-        if query.lower() == "exit":
-            break
-        # Process the user's query through the retrieval chain
-        chat_history.append(HumanMessage(content=query.lower()))
-        result = llm.invoke(chat_history)
-        # Display the AI's response
-        print(f"AI: {result.content}")
-        # Update the chat history
+    # asyncio.run(process_sentence([word], ACA_DICT))
+    # while True:
+    #     query = input("You: ")
+    #     if query.lower() == "exit":
+    #         break
+    #     # Process the user's query through the retrieval chain
+    #     chat_history.append(HumanMessage(content=query.lower()))
+    #     result = llm.invoke(chat_history)
+    #     # Display the AI's response
+    #     print(f"AI: {result.content}")
+    #     # Update the chat history
         
-        words = []
-        for word in result.content.lower().replace(",","").replace(".","").replace("  "," ").split():
-            if word not in ACA_DICT.keys():
-                for letter in word:
-                    words.append(letter.upper())
-            else:
-                # Similarity Search
-                words.append(word)
-        print(words)
+    #     words = []
+    #     for word in result.content.lower().replace(",","").replace(".","").replace("  "," ").split():
+    #         if word not in ACA_DICT.keys():
+    #             for letter in word:
+    #                 words.append(letter.upper())
+    #         else:
+    #             # Similarity Search
+    #             words.append(word)
+    #     print(words)
         
-        asyncio.run(process_sentence(words, ACA_DICT))
+    #     asyncio.run(process_sentence(words, ACA_DICT))
         
-        chat_history.append(AIMessage(content=result.content))
+    #     chat_history.append(AIMessage(content=result.content))
 
 
 # Main function to start the continual chat
