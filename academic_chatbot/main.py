@@ -169,6 +169,12 @@ chat_history = [
 # Function to simulate a continual chat
 def continual_chat():
     print("Start chatting with the AI! Type 'exit' to end the conversation.")
+    first_input = input("Enter what you want to know about: ")
+    word = first_input.lower()
+    
+    print("Would you like to ask any follow up questions?")
+    
+    asyncio.run(process_sentence([word], ACA_DICT))
     while True:
         query = input("You: ")
         if query.lower() == "exit":

@@ -131,6 +131,7 @@ async def stream_videos(queue, detector):
 async def process_sentence(words, word_to_video_map):
     """Processes a sentence and handles buffering and streaming concurrently."""
     detector = GPULandmarkDetector()
+    word_to_video_map = {word.lower(): video for word, video in word_to_video_map.items()}
 
     # Shared queue for buffering and streaming
     queue = asyncio.Queue(maxsize=3)  # Buffer size of 3 videos
@@ -154,9 +155,18 @@ llm = ChatGroq(
         model_name="llama-3.3-70b-versatile"
 )
 
-chat_history = [
+# Function to simulate a continual chat
+def continual_chat():
+    print("Start chatting with the AI! Type 'exit' to end the conversation.")
+    first_input = input("Enter what you want to know about: ")
+    word = first_input.lower()
+    
+    asyncio.run(process_sentence([word], AGRO_DICT))
+    
+    chat_history = [
     SystemMessage(content="""
                 You are a knowledgeable and concise agricultural assistant. "
+                "Your word is {}, and you are to answer questions regarding this."
                 "Respond in simple, short, and direct words suitable for Indian Sign Language (ISL). "
                 "Use as few words as possible while conveying the key academic concepts. "
                 "Do not use grammar and punctuations as ISL does not follow grammatical structures. "
@@ -164,12 +174,9 @@ chat_history = [
                 "If you are unsure or do not know the answer, say 'don't know'. "
                 "Do not use jargon or complex terms."
                 "Provide a concise, evidence-based response in a single sentence in no more than easily tokenisable sentence or short phrases. "
-                  """)
-]
-
-# Function to simulate a continual chat
-def continual_chat():
-    print("Start chatting with the AI! Type 'exit' to end the conversation.")
+                  """.format(word))
+    ]   
+    print("Would you like to ask any follow up questions?")
     while True:
         query = input("You: ")
         if query.lower() == "exit":
