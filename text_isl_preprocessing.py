@@ -3,8 +3,7 @@ from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
-from utils.idselector import VIDEO_ID
-from utils.railway_dictionary import RAILWAY_IDS
+from helper.railway_dictionary import RAILWAY_IDS
 
 class RailwaysAnnouncementPreprocessor:
    def __init__(self, dictionary=RAILWAY_IDS):
@@ -156,5 +155,5 @@ class RailwaysAnnouncementPreprocessor:
 if __name__ == "__main__":
    load_dotenv()
    preprocessor = RailwaysAnnouncementPreprocessor()
-   sentence = "Listen please, train number 173 destination to uttar pradesh started from chennai arrive at platform number 3"
+   sentence = "sorry to inform train number 1 2 3 is arrived for 2 hour"
    print(preprocessor.preprocess(sentence))

@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from langchain.embeddings import HuggingFaceEmbeddings
-from utils.academic_dict import ACA_DICT
+from helper.idselector import ACA_DICT
 
 # Initialize the HuggingFace embeddings model
 embeddings_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
