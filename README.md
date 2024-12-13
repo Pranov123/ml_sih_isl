@@ -37,8 +37,6 @@ This project aims to bridge the communication gap between the deaf community and
   - Developing a robust model for recognizing dynamic gesture sequences.
 - **Regional ISL Variations**:
   - Incorporating adaptability for regional differences in ISL.
-- **Enhanced Accuracy**:
-  - Refining gesture recognition and text-to-sign translation for higher accuracy.
 
 ## Acknowledgements
 - **Sarvam AI** for speech recognition.
