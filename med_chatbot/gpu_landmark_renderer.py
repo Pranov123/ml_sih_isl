@@ -4,8 +4,6 @@ import numpy as np
 import mediapipe as mp
 import torch
 import time
-from collections import deque
-import concurrent.futures
 from dotenv import load_dotenv
 
 from helper.drive_link_placeholder import DRIVE_LINK_PLACEHOLDER

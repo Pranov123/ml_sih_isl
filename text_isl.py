@@ -8,9 +8,9 @@ from collections import deque
 import concurrent.futures
 from dotenv import load_dotenv
 
-from utils.drive_link_placeholder import DRIVE_LINK_PLACEHOLDER
-from utils.connections import CONNECTIONS_NOT_NEEDED
-from utils.idselector import VIDEO_ID
+from helper.drive_link_placeholder import DRIVE_LINK_PLACEHOLDER
+from helper.connections import CONNECTIONS_NOT_NEEDED
+from helper.general_dictionary import VIDEO_ID
 from text_isl_preprocessing import RailwaysAnnouncementPreprocessor
 
 class GPULandmarkDetector:
@@ -232,7 +232,5 @@ async def process_sentence(words, word_to_video_map):
 # Example usage
 if __name__ == "__main__":
     load_dotenv()
-    sentence = "Attention all, train shatabdi from platform 9B is leaving from Andhra Pradesh."
-    preprocessor = RailwaysAnnouncementPreprocessor()
-    words = preprocessor.preprocess(sentence)
-    asyncio.run(process_sentence(words, VIDEO_ID))
+    sentence = "Good morning"
+    asyncio.run(process_sentence(sentence.lower().split(), VIDEO_ID))
