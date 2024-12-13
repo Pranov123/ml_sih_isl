@@ -1,5 +1,5 @@
 ## Overview
-This project aims to bridge the communication gap between the deaf community and individuals who do not know sign language by providing a robust system to convert spoken language into Indian Sign Language (ISL) and vice-versa. The tool facilitates seamless interaction in various scenarios, such as education, healthcare, and public announcements, empowering the deaf community to access critical information and engage fully in society.
+This project aims to bridge the communication gap between the deaf community and individuals who do not know sign language by providing a robust system to convert spoken language into Indian Sign Language (ISL) and vice-versa. The tool facilitates seamless interaction in various scenarios, such as healthcare, and public announcements, empowering the deaf community to access critical information and engage fully in society.
 
 ## Key Features
 - **Speech to ISL Conversion**:
