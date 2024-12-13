@@ -1,9 +1,9 @@
 ## Overview
-This project aims to bridge the communication gap between the deaf community and individuals who do not know sign language by providing a robust system to convert spoken language into Indian Sign Language (ISL) and vice-versa. The tool facilitates seamless interaction in various scenarios, such as healthcare, and public announcements, empowering the deaf community to access critical information and engage fully in society.
+This project (SIH 2024) aims to bridge the communication gap between the deaf community and individuals who do not know sign language by providing a robust system to convert spoken language into Indian Sign Language (ISL) and vice versa. The tool facilitates seamless interaction in various scenarios, such as healthcare and public announcements, empowering the deaf community to access critical information and engage fully in society.
 
 ## Key Features
 - **Speech to ISL Conversion**:
-  - Converts spoken language (English/Hindi) into ISL gestures using real-time speech recognition and text-to-sign conversion.
+  - Converts spoken language (English/Multiple Indic languages) into ISL gestures using real-time speech recognition and text-to-sign conversion.
   - Ensures accuracy and supports regional ISL variations.
 - **Text to ISL Conversion**:
   - Displays ISL gestures corresponding to given text inputs, satisfying use cases like railway announcements.
@@ -15,13 +15,13 @@ This project aims to bridge the communication gap between the deaf community and
 - **Sarvam AI**: Enables speech-to-text functionality for spoken language recognition.
 - **Python**: Backend implementation for processing inputs and generating outputs.
 - **OpenCV**: Used for real-time video feed capture and gesture recognition.
-- **Natural Language Processing (NLP)**: Translates recognized speech into text, forming the basis for ISL generation.
+- **Natural Language Processing (NLP)**: Translates recognized speech into text, forming the basis for ISL generation using GenAI.
 
 ## Use Cases
 1. **Public Announcements**:
    - Converts audio/text announcements at railway stations or other public venues into ISL gestures, ensuring accessibility for the deaf community.
 2. **Mobile App for ISL Interpretation**:
-   - Enables normal individuals to use their mobile cameras to interpret ISL gestures used by deaf individuals.
+   - Enables normal individuals to use their mobile cameras to interpret ISL gestures by deaf individuals.
 
 ## Current Status
 - **Speech to ISL**:
