@@ -38,5 +38,11 @@ This project (SIH 2024) aims to bridge the communication gap between the deaf co
 - **Regional ISL Variations**:
   - Incorporating adaptability for regional differences in ISL.
 
+## Full-Stack Project Repository
+The complete source code for the integrated full-stack application — including both frontend and backend components — is available at the following GitHub repository:
+
+🔗 [Lingua - GitHub Repository](https://github.com/Team-GenX-H4CK3RS/Lingua)
+
+
 ## Acknowledgements
 - **Sarvam AI** for speech recognition.
